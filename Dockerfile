@@ -4,7 +4,7 @@ FROM maven:3.8.4-openjdk-11-slim AS builder
 WORKDIR /app
 
 # Copy the pom.xml and the src folder to the working directory
-COPY src/main/java/com/example/dockerapp/pom.xml .
+COPY pom.xml .
 
 
 
