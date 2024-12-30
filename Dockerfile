@@ -1,24 +1,11 @@
-FROM maven:3.8.4-openjdk-11-slim AS builder
+# Use OpenJDK 17 slim image for running the application
+FROM openjdk:17-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the pom.xml and the src folder to the working directory
-COPY pom.xml .
-
-
-
-# Build the application using Maven
-RUN mvn clean package -DskipTests
-
-# Use a smaller base image to run the application
-FROM openjdk:11-jre-slim
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy the built jar file from the previous stage to the current container
-COPY --from=builder /app/target/dockerapp-0.0.1-SNAPSHOT.jar dockerapp.jar
+# Copy the built JAR file from the target folder into the container
+COPY target/dockerapp-0.0.1-SNAPSHOT.jar dockerapp.jar
 
 # Expose port 8088 (default Spring Boot port)
 EXPOSE 8088
