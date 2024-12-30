@@ -1,0 +1,57 @@
+node {
+    // Define parameters with choices
+    def repository = choice(
+        name: 'REPOSITORY',
+        choices: ['https://github.com/sibilucky/project2.git'],
+        description: 'Select the Git repository URL'
+    )
+    
+    def branch = choice(
+        name: 'BRANCH',
+        choices: ['main', 'master', 'release'],
+        description: 'Select the Git branch to checkout'
+    )
+    
+    def tag = choice(
+        name: 'TAG',
+        choices: ['latest', 'v1.0', 'v2.0'],
+        description: 'Select the Docker image tag'
+    )
+
+    try {
+        // Checkout code from Git
+        stage('Checkout') {
+            echo "Checking out code from repository: 'https://github.com/sibilucky/project2.git', branch: 'main'"
+            git url: 'https://github.com/sibilucky/project2.git', branch: 'main'
+        }
+
+        // Build the project
+        stage('Build') {
+            echo 'Building the project'
+            sh 'mvn clean install'
+        }
+
+        // Test the project
+        stage('Test') {
+            echo 'Running unit tests'
+            sh 'mvn test'
+        }
+
+        // Deploy the project
+        stage('Deploy') {
+            echo 'Deploying the project'
+            // Build Docker image with the selected tag
+            sh "docker build -t dockerapp:${tag} ."
+            // Run Docker container with port mapping
+            sh "docker run -d -p 8088:8089 dockerapp:${tag}"
+        }
+    } catch (Exception e) {
+        // Catch any error and mark the build as failed
+        currentBuild.result = 'FAILURE'
+        throw e
+    } finally {
+        // This block will always run
+        echo 'Cleaning up'
+        cleanWs() // Clean up the workspace after execution
+    }
+}
