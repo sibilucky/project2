@@ -12,53 +12,48 @@
     <packaging>jar</packaging>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version> <!-- Align with Dockerfile -->
+        <spring-boot.version>2.7.5</spring-boot.version> <!-- Spring Boot version management -->
     </properties>
 
     <dependencies>
-        <!-- Spring Boot Starter Web (version added) -->
+        <!-- Spring Boot Starter Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.7.5</version> <!-- Specify the version here -->
         </dependency>
 
-        <!-- Spring Boot Starter Test (version added) -->
+        <!-- Spring Boot Starter Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.7.5</version> <!-- Specify the version here -->
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Boot Starter Data JPA (version added) -->
+        <!-- Spring Boot Starter Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.7.5</version> <!-- Specify the version here -->
         </dependency>
 
-        <!-- H2 Database (version added) -->
+        <!-- H2 Database -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>2.1.214</version> <!-- Specify the version here -->
             <scope>runtime</scope>
         </dependency>
 
-        <!-- PostgreSQL Driver (version added) -->
+        <!-- PostgreSQL Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.5.1</version> <!-- Specify the version here -->
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Spring Boot DevTools (version added) -->
+        <!-- Spring Boot DevTools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <version>2.7.5</version> <!-- Specify the version here -->
             <scope>runtime</scope>
         </dependency>
     </dependencies>
@@ -69,17 +64,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.5</version> <!-- Specify the version here -->
+                <version>${spring-boot.version}</version>
             </plugin>
 
             <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version> <!-- Specify the version here -->
+                <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
