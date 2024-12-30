@@ -39,11 +39,10 @@ node {
 
         // Deploy the project
         stage('Deploy') {
-            echo 'Deploying the project'
-            // Build Docker image with the selected tag
-            sh "docker build -t dockerapp:${tag} ."
-            // Run Docker container with port mapping
-            sh "docker run -d -p 8088:8089 dockerapp:${tag}"
+           sh '''#!/bin/bash
+        docker build -t dockerapp:${params.TAG} .
+        docker run -d -p 8088:8089 dockerapp:${params.TAG}
+        '''
         }
     } catch (Exception e) {
         // Catch any error and mark the build as failed
