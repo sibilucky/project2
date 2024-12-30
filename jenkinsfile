@@ -39,10 +39,12 @@ node {
 
         // Deploy the project
         stage('Deploy') {
-           sh '''#!/bin/bash
-        docker build -t dockerapp:${params.TAG} .
-        docker run -d -p 8088:8089 dockerapp:${params.TAG}
-        '''
+            echo "Deploying with Docker tag: ${tag}"
+            sh '''
+                #!/bin/bash
+                docker build -t dockerapp:$TAG .
+                docker run -d -p 8088:8089 dockerapp:$TAG
+            '''
         }
     } catch (Exception e) {
         // Catch any error and mark the build as failed
