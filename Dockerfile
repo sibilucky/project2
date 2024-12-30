@@ -1,4 +1,3 @@
-  Use official Maven image to build the project
 FROM maven:3.8.4-openjdk-11-slim AS builder
 
 # Set the working directory inside the container
