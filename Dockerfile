@@ -5,11 +5,11 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file from the target folder into the container
-COPY target/dockerapp-0.0.1-SNAPSHOT.jar dockerapp.jar
+COPY target/dockerapp-0.0.1-SNAPSHOT.jar my-spring-boot-app.jar
 
 # Expose port 8088 (default Spring Boot port)
 EXPOSE 8088
 
 # Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "dockerapp.jar"]
+ENTRYPOINT ["java", "-jar", "my-spring-boot-app"]
 
