@@ -1,33 +1,36 @@
 node {
-    // Define parameters with choices
-    def repository = choice(
-        name: 'REPOSITORY',
-        choices: ['https://github.com/sibilucky/project2.git'],
-        description: 'Select the Git repository URL'
+    // Define parameters
+    def repository = input(
+        message: 'Select the Git repository URL',
+        parameters: [
+            choice(name: 'REPOSITORY', choices: ['https://github.com/sibilucky/project2.git'], description: 'Select the Git repository URL')
+        ]
     )
-    
-    def branch = choice(
-        name: 'BRANCH',
-        choices: ['main', 'master', 'release'],
-        description: 'Select the Git branch to checkout'
+
+    def branch = input(
+        message: 'Select the Git branch',
+        parameters: [
+            choice(name: 'BRANCH', choices: ['main', 'master', 'release'], description: 'Select the Git branch to checkout')
+        ]
     )
-    
-    def tag = choice(
-        name: 'TAG',
-        choices: ['latest', 'v1.0', 'v2.0'],
-        description: 'Select the Docker image tag'
+
+    def tag = input(
+        message: 'Select the Docker image tag',
+        parameters: [
+            choice(name: 'TAG', choices: ['latest', 'v1.0', 'v2.0'], description: 'Select the Docker image tag')
+        ]
     )
 
     try {
         // Checkout code from Git
         stage('Checkout') {
-            echo "Checking out code from repository: 'https://github.com/sibilucky/project2.git', branch: 'main'"
+            echo "Checking out code from repository: https://github.com/sibilucky/project2.git, branch: main"
             git url: 'https://github.com/sibilucky/project2.git', branch: 'main'
         }
 
         // Build the project
         stage('Build') {
-            echo 'Building the project'
+            echo 'Building the project using Maven'
             sh 'mvn clean install'
         }
 
@@ -37,14 +40,22 @@ node {
             sh 'mvn test'
         }
 
+        // Docker Login
+        stage('Docker Login') {
+            echo 'Logging into Docker registry'
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'sibisam2301@gmail.com', passwordVariable: 'devika@123')]) {
+                sh 'docker login -u  sibisam2301@gmail.com -p devika@123'
+            }
+        }
+
         // Deploy the project
         stage('Deploy') {
-            echo "Deploying with Docker tag: ${tag}"
-            sh '''
+            echo "Deploying Docker container with tag: ${tag}"
+            sh """
                 #!/bin/bash
-                docker build -t dockerapp:$TAG .
-                docker run -d -p 8088:8089 dockerapp:$TAG
-            '''
+                docker build -t dockerapp:${tag} .
+                docker run -d -p 8088:8089 dockerapp:${tag}
+            """
         }
     } catch (Exception e) {
         // Catch any error and mark the build as failed
@@ -56,3 +67,4 @@ node {
         cleanWs() // Clean up the workspace after execution
     }
 }
+
