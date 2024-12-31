@@ -43,7 +43,7 @@ node {
         // Docker Login
         stage('Docker Login') {
             echo 'Logging into Docker registry'
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'sibisam2301@gmail.com', passwordVariable: 'devika@123')]) {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', usernameVariable: 'sibisam2301@gmail.com', passwordVariable: 'devika@123')]) {
                 sh 'docker login -u  sibisam2301@gmail.com -p devika@123'
             }
         }
@@ -54,7 +54,7 @@ node {
             sh """
                 #!/bin/bash
                 docker build -t dockerapp:${tag} .
-                docker run -d -p 8088:8089 dockerapp:${tag}
+                docker run -d -p 8088:8088 dockerapp:${tag}
             """
         }
     } catch (Exception e) {
